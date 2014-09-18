@@ -17,9 +17,9 @@ screenCounter.updateScreen = function(){
 screenCounter.init = function(){
   var me = this;
   this.oldCounter = this.counter = 0;
-  this.intervalRefresh = 10000;
-  this.intervalEffect = 9800;
-
+  this.intervalRefresh = 15000;
+  this.intervalEffect  = 15000;
+  this.url = 'https://nestor-super-proxy.appspot.com/query?id=ahRzfm5lc3Rvci1zdXBlci1wcm94eXIVCxIIQXBpUXVlcnkYgICAgICAgAoM';
   console.log('init');
 
 
@@ -30,13 +30,20 @@ screenCounter.init = function(){
 };
 
 screenCounter.run = function(){
-  this.counter = this.getCurrent();
-  this.updateScreen();
+  var me = this;
+  $.ajax({
+    url:this.url,
+    dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
+    success:function(json){
+      me.counter = json.rows[0];
+      me.updateScreen();
+    },
+    error:function(){
+      conslole.log("Error");
+    }      
+  });
 };
 
-screenCounter.getCurrent = function(){
-  var current = Math.floor(Math.random() * 100) + 15000;
-  return current;
-};
+
 
 screenCounter.init();
